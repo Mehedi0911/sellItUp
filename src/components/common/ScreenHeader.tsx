@@ -1,17 +1,23 @@
+import { Ionicons } from "@expo/vector-icons";
+import { HStack, Icon, Pressable, Text } from "native-base";
 import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
+import { colors } from "../../theme/colors";
 
 interface ScreenHeaderProps {
-  title: string;
-  style: any;
-  icon: any;
+  title?: string;
+  style?: any;
 }
 
-const ScreenHeader = (props: ScreenHeaderProps) => {
+const ScreenHeader = ({ title, style }: ScreenHeaderProps) => {
   return (
-    <View style={styles.container}>
-      <Text>ScreenHeader</Text>
-    </View>
+    <HStack justifyContent={'space-between'} borderBottomColor={colors.grey} borderBottomWidth={2} h={12} alignItems="center" flexDirection={'row'}>
+      <Pressable>
+        <Icon ml={2} mt={0.5} as={Ionicons} name="chevron-back" size="lg" color={colors.black} />
+      </Pressable>
+      <Text fontSize={'xl'} ml={-6} fontWeight="semibold">{title}</Text>
+      <Text fontSize={'xl'} ml={2} fontWeight="semibold"></Text>
+    </HStack>
   );
 };
 

@@ -36,15 +36,15 @@ export default function App() {
   const appTheme = extendTheme({
     colors: {
       brandPrimary: {
-        100: "#85a3b8",
-        200: "#6d91a9",
-        300: "#547e9b",
-        400: "#3c6c8d",
-        500: "#23597e",
-        main: "#0B4770",
+        100: "#e6f5ff",
+        200: "#99d8ff",
+        300: "#80ceff",
+        400: "#4dbaff",
+        500: "#33b1ff",
+        main: colors.primary,
       },
       brandSecondary: {
-        main: "#F7931E",
+        main: colors.secondary,
         100: "#fbc98f",
         200: "#fabe78",
         300: "#f9b362",
@@ -52,6 +52,7 @@ export default function App() {
         500: "#f89e35",
       },
     },
+
   });
 
   return (
