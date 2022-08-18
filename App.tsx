@@ -5,7 +5,18 @@ import "react-native-gesture-handler";
 import { extendTheme, NativeBaseProvider, theme } from "native-base";
 import { colors } from "./src/theme/colors";
 import { useEffect, useState } from "react";
+import { initializeApp } from "firebase/app";
 import * as Font from "expo-font";
+import { firebaseConfig } from "./src/utils/firebaseConfig";
+import { getFirestore } from "firebase/firestore";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import AuthProvider from "./src/providers/auth";
+import AdProviders from "./src/providers/ad";
+
+const app = initializeApp({ ...firebaseConfig });
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
@@ -17,13 +28,17 @@ export default function App() {
           "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
         });
       } catch (error) {
-        console.log(error);
       } finally {
         setFontsLoaded(true);
       }
     };
     loadFonts();
   }, []);
+
+  // useEffect(() => {
+  //   signOut(auth)
+  // }, [])
+
 
   if (!fontsLoaded) {
     return (
@@ -57,10 +72,14 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <NativeBaseProvider theme={appTheme}>
-        <Navigation />
-      </NativeBaseProvider>
-      <StatusBar style="auto" />
+      <AdProviders>
+        <AuthProvider>
+          <NativeBaseProvider theme={appTheme}>
+            <Navigation />
+          </NativeBaseProvider>
+          <StatusBar style="auto" />
+        </AuthProvider>
+      </AdProviders>
     </View>
   );
 }

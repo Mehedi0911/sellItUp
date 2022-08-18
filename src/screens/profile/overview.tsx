@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import ComingSoon from '../../components/common/CommingSoon';
 
 interface OverviewProps { }
 
 const Overview = (props: OverviewProps) => {
     return (
-        <View style={styles.container}>
-            <Text>Overview</Text>
-        </View>
+        <ComingSoon />
     );
 };
 

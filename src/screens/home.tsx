@@ -5,10 +5,14 @@ import Banner from "../components/Home/Banner";
 import BrowseCategories from "../components/Home/BrowseCategories";
 import SearchArea from "../components/Home/SearchArea";
 import PopularAds from "../components/Ads/PopularAds";
+import { AuthContext } from "../providers/auth";
 
-interface HomeProps { }
+interface HomeProps {
+  navigation: any
+}
 
-const Home = (props: HomeProps) => {
+const Home = ({ navigation }: HomeProps) => {
+  const { user } = React.useContext(AuthContext)
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -16,7 +20,7 @@ const Home = (props: HomeProps) => {
         <Banner />
         <SearchArea />
         <View style={{ paddingHorizontal: 20 }}>
-          <BrowseCategories />
+          <BrowseCategories navigation={navigation} />
           <PopularAds />
         </View>
       </ScrollView>

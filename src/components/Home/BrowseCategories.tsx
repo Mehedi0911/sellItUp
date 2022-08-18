@@ -1,18 +1,23 @@
 import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { HStack, Icon, Text } from 'native-base';
 import * as React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
+import { categories } from '../../constants/data';
 import { colors } from '../../theme/colors';
+import CategoryCard from '../Ads/CategoryCard';
 
-interface BrowseCategoriesProps { }
+interface BrowseCategoriesProps {
+    navigation: any
+}
 
-const BrowseCategories = (props: BrowseCategoriesProps) => {
+const BrowseCategories = ({ navigation }: BrowseCategoriesProps) => {
     return (
         <View style={styles.container}>
             <HStack justifyContent='space-between' alignItems={'center'} mb={3}>
                 <Text fontSize={'lg'} fontWeight='semibold'>Categories</Text>
 
-                <Pressable>
+                <Pressable onPress={() => navigation.navigate('Categories')}>
                     <HStack justifyContent='space-between' alignItems={'center'}>
                         <Text fontSize={'md'} fontWeight='bold' color={colors.primary} mr={1}>Browse All</Text>
                         <Icon mt={0.5} as={AntDesign} name="arrowright" size="sm" color={colors.primary} />
@@ -21,14 +26,10 @@ const BrowseCategories = (props: BrowseCategoriesProps) => {
 
             </HStack>
 
-            <HStack flexWrap={'wrap'} justifyContent="center">
+            <HStack flexWrap={'wrap'} justifyContent="center" space={1}>
                 {
-                    [1, 2, 3, 4, 5, 6].map((cat, ind) => (
-                        <View style={styles.box} key={ind}>
-                            <Icon alignSelf={'center'} mt={0.5} as={AntDesign} name="arrowright" size="sm" color={colors.primary} />
-                            <Text alignSelf={'center'} fontSize="md">Mobiles</Text>
-                            <Text alignSelf={'center'} fontSize="xs" color={'grey'}>49,500 Ads</Text>
-                        </View>
+                    categories?.slice(0, 6)?.map((category, index) => (
+                        <CategoryCard category={category} key={index} />
                     ))
                 }
             </HStack>

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import ComingSoon from '../../components/common/CommingSoon';
 
 interface AboutProps { }
 
 const About = (props: AboutProps) => {
     return (
-        <View style={styles.container}>
-            <Text>About</Text>
-        </View>
+        <ComingSoon />
     );
 };
 

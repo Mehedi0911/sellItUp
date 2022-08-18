@@ -11,10 +11,8 @@ interface CategoryCardProps {
 
 
 const CategoryCard = ({ category }: CategoryCardProps) => {
-    console.log(category.iconType)
     return (
-        <Center w={"32%"} bgColor={"brandPrimary.100"} borderRadius={5} p={2}>
-            {/* <CategoryIcon type={category?.iconType} name={category?.iconName} /> */}
+        <Center w={"32%"} bgColor={colors.grey} borderRadius={5} p={2} mb={1}>
             {
                 category.iconType === 'AntDesign' ?
                     <Icon as={AntDesign} name={category?.iconName} size="xl" mb={2} /> :
@@ -37,3 +35,5 @@ export default CategoryCard;
 const styles = StyleSheet.create({
     container: {}
 });
+
+

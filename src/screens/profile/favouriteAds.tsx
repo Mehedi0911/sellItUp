@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import ComingSoon from '../../components/common/CommingSoon';
 
 interface FavoriteAdsProps { }
 
 const FavoriteAds = (props: FavoriteAdsProps) => {
     return (
-        <View style={styles.container}>
-            <Text>FavoriteAds</Text>
-        </View>
+        <ComingSoon />
     );
 };
 

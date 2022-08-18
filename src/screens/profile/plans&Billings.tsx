@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import ComingSoon from '../../components/common/CommingSoon';
 
 interface PlanAndBillingsProps { }
 
 const PlanAndBillings = (props: PlanAndBillingsProps) => {
     return (
-        <View style={styles.container}>
-            <Text>PlanAndBillings</Text>
-        </View>
+        <ComingSoon />
     );
 };
 

@@ -4,24 +4,26 @@ import * as React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import AdCard from "../components/Ads/AdCard";
 import AppBar from "../components/common/AppBar";
+import { AdContext } from "../providers/ad";
 import { colors } from "../theme/colors";
 
 interface AllAdsProps { }
 
 const AllAds = (props: AllAdsProps) => {
+  const { allAds } = React.useContext(AdContext)
   const [category, setCategory] = React.useState('Newest');
   return (
     <ScrollView style={styles.container}>
       <AppBar showToolBar darkTheme />
-      <HStack p={6} alignItems="center" justifyContent="flex-start">
-        <TextArea variant='unstyled' autoCompleteType={"off"} h={12} w={'85%'} mr={4} placeholder="search for anything" p={4} bgColor={colors.grey} />
+      <HStack p={5} alignItems="center" justifyContent="flex-start">
+        <TextArea flex={1} variant='unstyled' autoCompleteType={"off"} h={12} mr={4} placeholder="search for anything" p={4} bgColor={colors.grey} />
         <Button w={16} h={12} bgColor={colors.primary}><Icon as={Ionicons} name="filter-sharp" size="lg" color={colors.white} /></Button>
       </HStack>
-      <HStack px={7} alignItems="center" justifyContent="space-between">
+      <HStack px={5} alignItems="center" justifyContent="space-between">
         <Text color={'grey'}>53,456 Ads Found</Text>
         <Select selectedValue={category}
           onValueChange={itemValue => setCategory(itemValue)}
-          bgColor={colors.grey} minWidth="200"
+          bgColor={colors.grey} minWidth="180"
           accessibilityLabel="Choose Service"
           placeholder="Newest"
           _selectedItem={{
@@ -37,8 +39,8 @@ const AllAds = (props: AllAdsProps) => {
       </HStack>
       <HStack alignItems={'center'} flexWrap='wrap' p={5}>
         {
-          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((ad, index) => (
-            <AdCard key={index} />
+          allAds?.map((ad: any, index: number) => (
+            <AdCard key={index} ad={ad} />
           ))
         }
       </HStack>

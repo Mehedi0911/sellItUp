@@ -29,6 +29,8 @@ import ProfileSettings from "../screens/profile/profileSettings";
 import MayAds from "../screens/profile/myads";
 import FavoriteAds from "../screens/profile/favouriteAds";
 import PlanAndBillings from "../screens/profile/plans&Billings";
+import { AuthContext } from "../providers/auth";
+import AdDetails from "../screens/adDetails";
 
 interface NavigationProps { }
 
@@ -58,7 +60,7 @@ const CreateAdsStackGroup = () => {
 }
 
 const HomeTabs = () => {
-  const navigation = useNavigation()
+  const { user } = React.useContext(AuthContext)
   return (
     <Tab.Navigator
       screenOptions={{
@@ -95,7 +97,7 @@ const HomeTabs = () => {
             </View>
           ),
         }} />
-      <Tab.Screen name="CreateAdsStackGroup" component={CreateAdsStackGroup}
+      <Tab.Screen name="CreateAdsStackGroup" component={user ? CreateAdsStackGroup : AuthStackGroup}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
@@ -103,7 +105,8 @@ const HomeTabs = () => {
           ),
           tabBarButton: (props) => (
             <CreateAdButton {...props} />
-          )
+          ),
+
         }}
       />
       <Tab.Screen name="Categories" component={Categories}
@@ -132,10 +135,11 @@ const HomeTabs = () => {
   );
 };
 
-const HomeStackGroup = () => {
+export const HomeStackGroup = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
+      <HomeStack.Screen name="AdDetails" component={AdDetails} options={{ headerShown: false }} />
     </HomeStack.Navigator>
   );
 };
@@ -197,9 +201,9 @@ const Navigation = (props: NavigationProps) => {
           <Drawer.Screen name="Profile" component={ProfileSettings} options={{
             drawerIcon: ({ color }) => (<Icon as={MaterialIcons} name="account-box" color={color} size='lg' />)
           }} />
-          {/* <Drawer.Screen name="Account" component={AuthStackGroup} options={{
+          <Drawer.Screen name="Account" component={AuthStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={Ionicons} name="home" color={color} size='lg' />),
-          }} /> */}
+          }} />
 
         </Drawer.Navigator>
       </NavigationContainer>

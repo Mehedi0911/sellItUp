@@ -1,13 +1,12 @@
 import * as React from "react";
 import { Text, View, StyleSheet } from "react-native";
+import ComingSoon from "../components/common/CommingSoon";
 
-interface AccountProps {}
+interface AccountProps { }
 
 const Account = (props: AccountProps) => {
   return (
-    <View style={styles.container}>
-      <Text>Account</Text>
-    </View>
+    <ComingSoon />
   );
 };
 

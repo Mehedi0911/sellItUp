@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { HStack, Icon, Pressable, Text } from "native-base";
 import * as React from "react";
 import { StyleSheet } from "react-native";
@@ -10,9 +11,10 @@ interface ScreenHeaderProps {
 }
 
 const ScreenHeader = ({ title, style }: ScreenHeaderProps) => {
+  const navigation = useNavigation()
   return (
     <HStack justifyContent={'space-between'} borderBottomColor={colors.grey} borderBottomWidth={2} h={12} alignItems="center" flexDirection={'row'}>
-      <Pressable>
+      <Pressable onPress={() => navigation.goBack()}>
         <Icon ml={2} mt={0.5} as={Ionicons} name="chevron-back" size="lg" color={colors.black} />
       </Pressable>
       <Text fontSize={'xl'} ml={-6} fontWeight="semibold">{title}</Text>

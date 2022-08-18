@@ -1,4 +1,4 @@
-import { Button, Checkbox, HStack, Icon, Pressable, Text, TextArea } from "native-base";
+import { Button, Checkbox, HStack, Icon, Pressable, Spinner, Text, TextArea } from "native-base";
 import * as React from "react";
 import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import AppBar from "../components/common/AppBar";
@@ -7,11 +7,18 @@ import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
 import Input from "../components/common/Input";
+import { AuthContext } from "../providers/auth";
 interface SignInProps {
   navigation: any;
 }
 
 const SignIn = ({ navigation }: SignInProps) => {
+  const { signin, loading } = React.useContext(AuthContext)
+  const [credentials, setCredentials] = React.useState({
+    email: '',
+    password: '',
+  })
+
   return (
     <View style={styles.container}>
       <AppBar showToolBar={false} />
@@ -23,8 +30,8 @@ const SignIn = ({ navigation }: SignInProps) => {
           </Text>
         </HStack>
         <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
-        <Input placeHolder="email" />
-        <Input placeHolder="password" secureTextEntry />
+        <Input placeHolder="email" onChangeText={(text: string) => setCredentials({ ...credentials, email: text })} />
+        <Input placeHolder="password" secureTextEntry onChangeText={(text: string) => setCredentials({ ...credentials, password: text })} />
         <HStack justifyContent="space-between" alignItems="center">
           <Checkbox value="keepLogged" accessibilityLabel="logged" defaultIsChecked>
             Keep me logged
@@ -35,11 +42,14 @@ const SignIn = ({ navigation }: SignInProps) => {
             </Text>
           </Pressable>
         </HStack>
-        <Button my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
-          Sign In
-        </Button>
+        {loading ? <Spinner size="lg" color={colors.secondary} /> :
+          <Button onPress={() => signin(credentials)} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
+            Sign In
+          </Button>
+        }
         <HStack alignItems="center">
           <Text mr={3}>Don't have account?</Text>
+
           <Pressable onPress={() => navigation.navigate("SignUp")}>
             <Text color="brandPrimary.main" fontWeight={"bold"}>
               Sign Up
