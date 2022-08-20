@@ -1,7 +1,7 @@
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { Avatar, Divider, HStack, Icon, Text, View, VStack } from 'native-base';
+import { Avatar, Center, Divider, HStack, Icon, Text, View, VStack } from 'native-base';
 import * as React from 'react';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { AuthContext } from '../../providers/auth';
@@ -21,9 +21,15 @@ const CustomDrawer = (props: any) => {
         <ScrollView style={styles.container}>
             <AppBar showToolBar minimal />
             {isAuthenticated && <HStack p={5} bgColor={colors.grey} alignItems="center">
-                <Avatar bg="green.500" source={{
-                    uri: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                }} />
+                {
+                    !user?.photoUrl ?
+                        <Center bgColor={colors.primary} h={12} w={12} borderRadius={24}>
+                            <Text fontSize={'xl'} fontWeight={'bold'} color={colors.white}>{user?.fullName?.charAt(0)?.toUpperCase()}</Text>
+                        </Center> :
+                        <Avatar size={'md'} bg="green.500" source={{
+                            uri: user?.photoUrl
+                        }} />
+                }
                 <VStack ml={3}>
                     <Text fontSize={'md'} fontWeight='bold'>{user?.fullName}</Text>
                     <Text>{user?.type}</Text>

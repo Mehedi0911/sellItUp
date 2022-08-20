@@ -27,6 +27,9 @@ const SignUp = ({ navigation }: SignUpProps) => {
     fullName: '',
     email: '',
     password: '',
+    phone: '',
+    address: '',
+    website: ''
   })
 
 

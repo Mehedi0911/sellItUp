@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, query, where } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
@@ -10,6 +10,7 @@ import { AuthContext } from './auth';
 export const AdContext = React.createContext({} as any);
 
 const initialNewAd = {
+    createdAt: new Date(),
     title: '',
     category: '',
     subCategory: '',
@@ -36,6 +37,8 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
     const [newAd, setNewAd] = React.useState(initialNewAd)
     const [allAds, setAllAds] = React.useState([] as any)
     const [images, setImages] = React.useState([] as any)
+    const [adQuery, setAdQuery] = React.useState({ title: '', location: '', category: '' } as any)
+    const [sortLabel, setSortLabel] = React.useState({ orderBy: 'createdAt', orderDir: 'desc' } as any)
 
     const saveAd = async (data: any) => {
         let imgUrls: any = []
@@ -52,6 +55,7 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
             await addDoc(collection(db, 'ads'), {
                 ...data,
                 images: imgUrls,
+                createdAt: new Date()
             })
             setNewAd(initialNewAd)
             setImages([])
@@ -59,17 +63,17 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
         }
     }
     React.useEffect(() => {
-        const q = query(collection(db, 'ads'))
-        const notesListenerSubscription = onSnapshot(q, (querySnapshot) => {
+        const q = query(collection(db, 'ads'), orderBy(sortLabel?.orderBy, sortLabel?.orderDir))
+        const adsListenerSubscription = onSnapshot(q, (querySnapshot) => {
             let adList: any = [];
             querySnapshot.forEach(snapshot => {
                 adList.push({ ...snapshot.data(), id: snapshot.id })
             })
             setAllAds(adList)
+            console.log(sortLabel);
         })
-
-        return notesListenerSubscription;
-    }, [])
+        return adsListenerSubscription;
+    }, [sortLabel])
 
     return (
         <AdContext.Provider
@@ -80,7 +84,8 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
                 setAllAds,
                 saveAd,
                 images,
-                setImages
+                setImages,
+                adQuery, setAdQuery, sortLabel, setSortLabel
             }}>
             {children}
         </AdContext.Provider>

@@ -12,6 +12,7 @@ export const AuthContext = React.createContext({} as any);
 const AuthProvider: React.FunctionComponent = ({ children }) => {
     const toast = useToast()
     const [user, setUser] = React.useState(null as any)
+    const [refreshUser, setRefreshUser] = React.useState(false)
     const [isAuthenticated, setAuthenticated] = React.useState(false)
     const [loading, setLoading] = React.useState(false)
 
@@ -21,11 +22,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             setLoading(true)
             const res = await signInWithEmailAndPassword(auth, email, password);
             setAuthenticated(true)
-            const q = query(collection(db, "users"), where("userID", "==", res.user.uid));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach((doc) => {
-                setUser(doc.data())
-            });
+            // const q = query(collection(db, "users"), where("userID", "==", res.user.uid));
+            // const querySnapshot = await getDocs(q);
+            // querySnapshot.forEach((doc) => {
+            //     setUser({ ...doc.data(), id: doc.id })
+            // });
             setLoading(false)
             toast.show({
                 render: () => <ToastBox type='success' message={"Signed In Successfully"} />,
@@ -83,6 +84,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         })
     }
 
+
     React.useEffect(() => {
         const subscription = onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -91,7 +93,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                     const q = query(collection(db, "users"), where("userID", "==", user.uid));
                     const querySnapshot = await getDocs(q);
                     querySnapshot.forEach((doc) => {
-                        setUser(doc.data())
+                        setUser({ ...doc.data(), id: doc.id })
                     });
                 }
                 getUser()
@@ -101,7 +103,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             }
         })
         return subscription;
-    }, [auth])
+    }, [auth, refreshUser])
 
     return (
         <AuthContext.Provider
@@ -113,7 +115,9 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                 signUpUserWithEmail,
                 signOutUser,
                 isAuthenticated,
-                setAuthenticated
+                setAuthenticated,
+                refreshUser,
+                setRefreshUser
             }}>
             {children}
         </AuthContext.Provider>

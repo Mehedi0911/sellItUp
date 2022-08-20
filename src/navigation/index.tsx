@@ -120,13 +120,13 @@ const HomeTabs = () => {
           ),
         }}
       />
-      <Tab.Screen name="Account" component={Account}
+      <Tab.Screen name="Profile" component={user ? ProfileSettings : AuthStackGroup}
         options={{
           headerShown: false,
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: "center", justifyContent: "center" }}>
               <MaterialIcons name="account-circle" size={20} color={focused ? colors.primary : "grey"} />
-              <Text style={{ color: focused ? colors.primary : "grey" }}>Account</Text>
+              <Text style={{ color: focused ? colors.primary : "grey" }}>Profile</Text>
             </View>
           ),
         }}
@@ -145,10 +145,11 @@ export const HomeStackGroup = () => {
 };
 
 const AuthStackGroup = () => {
+  const { user } = React.useContext(AuthContext)
   return (
     <AuthStack.Navigator>
-      <AuthStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-      <AuthStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+      {!user && <AuthStack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />}
+      {!user && <AuthStack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />}
       <AuthStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
       <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
       <AuthStack.Screen name="VerifyAccount" component={VerifyAccount} options={{ headerShown: false }} />
@@ -167,7 +168,7 @@ const AppTheme = {
 };
 
 const Navigation = (props: NavigationProps) => {
-  const user = true; //temporary user
+  const { user } = React.useContext(AuthContext)
   return (
     <View style={styles.container}>
       <NavigationContainer theme={AppTheme}>
@@ -198,7 +199,7 @@ const Navigation = (props: NavigationProps) => {
           <Drawer.Screen name="Plans & Billings" component={PlanAndBillings} options={{
             drawerIcon: ({ color }) => (<Icon as={Ionicons} name="trophy" color={color} size='lg' />)
           }} />
-          <Drawer.Screen name="Profile" component={ProfileSettings} options={{
+          <Drawer.Screen name="Profile" component={user ? ProfileSettings : AuthStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={MaterialIcons} name="account-box" color={color} size='lg' />)
           }} />
           <Drawer.Screen name="Account" component={AuthStackGroup} options={{
