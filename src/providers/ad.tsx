@@ -55,7 +55,8 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
             await addDoc(collection(db, 'ads'), {
                 ...data,
                 images: imgUrls,
-                createdAt: new Date()
+                createdAt: new Date(),
+                price: parseFloat(data?.price)
             })
             setNewAd(initialNewAd)
             setImages([])

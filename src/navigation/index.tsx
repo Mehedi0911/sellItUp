@@ -31,6 +31,7 @@ import FavoriteAds from "../screens/profile/favouriteAds";
 import PlanAndBillings from "../screens/profile/plans&Billings";
 import { AuthContext } from "../providers/auth";
 import AdDetails from "../screens/adDetails";
+import EditAd from "../screens/editAd";
 
 interface NavigationProps { }
 
@@ -55,6 +56,7 @@ const CreateAdsStackGroup = () => {
       <CreateAdStack.Screen name="CreateAdScreenTwo" component={CreateAdScreenTwo} options={{ headerShown: false }} />
       <CreateAdStack.Screen name="CreateAdScreenThree" component={CreateAdScreenThree} options={{ headerShown: false }} />
       <CreateAdStack.Screen name="CreateAdSuccess" component={CreateAdSuccess} options={{ headerShown: false }} />
+      {/* <CreateAdStack.Screen name="EditAd" component={EditAd} options={{ headerShown: false }} /> */}
     </CreateAdStack.Navigator>
   )
 }
@@ -140,6 +142,7 @@ export const HomeStackGroup = () => {
     <HomeStack.Navigator>
       <HomeStack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
       <HomeStack.Screen name="AdDetails" component={AdDetails} options={{ headerShown: false }} />
+      <HomeStack.Screen name="EditAd" component={EditAd} options={{ headerShown: false }} />
     </HomeStack.Navigator>
   );
 };

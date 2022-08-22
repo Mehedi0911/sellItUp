@@ -1,4 +1,4 @@
-import { Box, Text } from 'native-base';
+import { Box, Text, View } from 'native-base';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { colors } from '../../theme/colors';
@@ -10,9 +10,9 @@ interface ToastBoxProps {
 
 const ToastBox = ({ message, type }: ToastBoxProps) => {
     return (
-        <Box bg={type === 'success' ? 'green' : colors.red} px="2" py="1" rounded="sm" mb={5}>
+        <View bgColor={type === 'success' ? 'green' : colors.red} px="2" py="1" rounded="sm" mb={5}>
             <Text color={colors.white}>{message}</Text>
-        </Box>
+        </View>
     );
 };
 
