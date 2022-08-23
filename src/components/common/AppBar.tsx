@@ -1,16 +1,20 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import { Box, HStack, Icon, IconButton, Image, StatusBar, Text } from "native-base";
+import { Box, HStack, Icon, IconButton, Image, Pressable, StatusBar, Text } from "native-base";
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../theme/colors";
+import { AuthContext } from "../../providers/auth";
+import { useNavigation } from "@react-navigation/native";
 interface AppBarProps {
   showToolBar: boolean;
   darkTheme?: boolean
-  minimal?: boolean
+  minimal?: ConstrainBooleanParameters
 }
 
 const AppBar = ({ showToolBar, darkTheme, minimal }: AppBarProps) => {
+  const { user } = React.useContext(AuthContext)
+  const navigation: any = useNavigation()
   return (
     <View>
       <HStack bg={darkTheme ? colors.dark : colors.white} px="1" py="3" justifyContent="space-between" alignItems="center" w="100%">
@@ -23,13 +27,15 @@ const AppBar = ({ showToolBar, darkTheme, minimal }: AppBarProps) => {
         </HStack>
         {showToolBar && (
           <HStack alignItems={'center'}>
-            {!minimal &&
-              <IconButton icon={<Icon as={MaterialIcons} name="search" size="lg" color={darkTheme ? colors.white : colors.black} />} />
-            }
-            {!minimal &&
+
+            <IconButton icon={<Icon as={MaterialIcons} name="search" size="lg" color={darkTheme ? colors.white : colors.black} />} />
+
+            {(!minimal && user) &&
               <IconButton icon={<Icon as={MaterialIcons} name="favorite" size="lg" color={darkTheme ? colors.white : colors.black} />} />
             }
-            <IconButton icon={<Icon as={MaterialIcons} name="notifications" size="lg" color={darkTheme ? colors.white : colors.black} />} />
+            {(!minimal && user) &&
+              <IconButton onPress={() => navigation.navigate('Notifications')} icon={<Icon as={MaterialIcons} name="notifications" size="lg" color={darkTheme ? colors.white : colors.black} />} />
+            }
           </HStack>
         )}
       </HStack>

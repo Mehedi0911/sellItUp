@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
-import { addDoc, collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { useToast } from 'native-base';
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
@@ -14,6 +14,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     const [user, setUser] = React.useState(null as any)
     const [refreshUser, setRefreshUser] = React.useState(false)
     const [isAuthenticated, setAuthenticated] = React.useState(false)
+    const [allNotifications, setAllNotifications] = React.useState([] as any)
     const [loading, setLoading] = React.useState(false)
 
     const signin = async (credentials: any) => {
@@ -84,6 +85,21 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         })
     }
 
+    const CreateNotification = async (action: string, actionTaker: string, notificationString: string, forWhom: string,) => {
+        try {
+            await addDoc(collection(db, 'notifications'), {
+                status: 'new',
+                action: action,
+                actionTaker: actionTaker,
+                notificationString: notificationString,
+                redirectTo: 'someLink',
+                forWhom: forWhom,
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     React.useEffect(() => {
         const subscription = onAuthStateChanged(auth, (user) => {
@@ -105,6 +121,19 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         return subscription;
     }, [auth, refreshUser])
 
+    React.useEffect(() => {
+        if (user) {
+            const q = query(collection(db, 'notifications'), where('forWhom', '==', user.userID))
+            const notificationsListenerSubscription = onSnapshot(q, (querySnapshot) => {
+                let notificationsList: any = [];
+                querySnapshot.forEach(snapshot => {
+                    notificationsList.push({ ...snapshot.data(), id: snapshot.id })
+                })
+                setAllNotifications(notificationsList)
+            })
+            return notificationsListenerSubscription;
+        }
+    }, [user])
     return (
         <AuthContext.Provider
             value={{
@@ -117,7 +146,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                 isAuthenticated,
                 setAuthenticated,
                 refreshUser,
-                setRefreshUser
+                setRefreshUser,
+                CreateNotification, allNotifications
             }}>
             {children}
         </AuthContext.Provider>

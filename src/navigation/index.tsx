@@ -32,6 +32,7 @@ import PlanAndBillings from "../screens/profile/plans&Billings";
 import { AuthContext } from "../providers/auth";
 import AdDetails from "../screens/adDetails";
 import EditAd from "../screens/editAd";
+import Notifications from "../screens/notifications";
 
 interface NavigationProps { }
 
@@ -143,6 +144,7 @@ export const HomeStackGroup = () => {
       <HomeStack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
       <HomeStack.Screen name="AdDetails" component={AdDetails} options={{ headerShown: false }} />
       <HomeStack.Screen name="EditAd" component={EditAd} options={{ headerShown: false }} />
+      <HomeStack.Screen name="Notifications" component={Notifications} options={{ headerShown: false }} />
     </HomeStack.Navigator>
   );
 };

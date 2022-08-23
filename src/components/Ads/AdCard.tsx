@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { colors } from '../../theme/colors';
 import { Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { addDoc, deleteDoc, doc, FieldValue, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, FieldValue, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../../providers/auth';
 import { db } from '../../../App';
 import ToastBox from '../common/ToastBox';
@@ -17,7 +17,7 @@ const screen = Dimensions.get("screen");
 
 const AdCard = ({ ad }: AdCardProps) => {
     const toast = useToast()
-    const { user } = React.useContext(AuthContext)
+    const { user, CreateNotification } = React.useContext(AuthContext)
     const navigation: any = useNavigation()
     const [comment, setComment] = React.useState('')
     const deleteAd = async (id: string) => {
@@ -33,13 +33,13 @@ const AdCard = ({ ad }: AdCardProps) => {
     }
 
     const AddComment = async () => {
-        console.log('called')
         const docRef = doc(db, "ads", ad?.id);
-
-        // Atomically add a new region to the "regions" array field.
         await updateDoc(docRef, {
             comments: [...ad?.comments, { userId: user?.userID, comment: comment, userName: user?.fullName, userImage: user?.photoUrl }]
         });
+        if (user?.userID !== ad?.userID) {
+            CreateNotification('commented', user?.fullName, 'on your ad', ad?.userID)
+        }
         setComment('')
     }
     return (
@@ -93,8 +93,8 @@ const AdCard = ({ ad }: AdCardProps) => {
                 <Text fontWeight={'bold'} opacity={0.6} mb={2}>{ad?.comments?.length} comments</Text>
                 <View>
                     {
-                        ad?.comments?.map((comment: any) => (
-                            <HStack alignItems="flex-start" my={2}>
+                        ad?.comments?.map((comment: any, index: number) => (
+                            <HStack alignItems="flex-start" my={2} key={index}>
                                 {!comment?.userImage ?
                                     <Center bgColor={colors.primary} h={9} w={9} borderRadius={18} mr={1.5}>
                                         <Text fontSize={'xl'} fontWeight={'bold'} color={colors.white}>{comment?.userName?.charAt(0)?.toUpperCase()}</Text>
