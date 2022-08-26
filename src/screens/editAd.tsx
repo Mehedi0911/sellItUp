@@ -9,6 +9,7 @@ import { db } from '../../App';
 import ScreenHeader from '../components/common/ScreenHeader';
 import TextField from '../components/common/TextField';
 import ToastBox from '../components/common/ToastBox';
+import { actions, notificationString } from '../constants/notificationActions';
 import { AuthContext } from '../providers/auth';
 import { colors } from '../theme/colors';
 
@@ -18,7 +19,7 @@ interface EditAdProps {
 
 const EditAd = ({ route }: any) => {
     const toast = useToast()
-    const { user } = React.useContext(AuthContext)
+    const { user, CreateNotification } = React.useContext(AuthContext)
     const ad = route?.params?.ad
     const [newFeature, setNewFeature] = React.useState('')
     const [loading, setLoading] = React.useState(false)
@@ -55,6 +56,7 @@ const EditAd = ({ route }: any) => {
                 price: parseFloat(editedAd.price),
                 tags: editedAd.tags
             });
+            CreateNotification(actions.AD_EDITED, user?.fullName, notificationString?.HAS_BEEN_UPDATED, user?.userID)
             toast.show({
                 render: () => { return <ToastBox type='success' message={"Updated Successfully"} /> },
                 placement: "top"

@@ -10,6 +10,7 @@ import { AuthContext } from '../../providers/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../../App';
 import { colors } from '../../theme/colors';
+import { actions, notificationString } from '../../constants/notificationActions';
 interface ProfileSettingsProps { }
 
 const TextField = ({ title, value, onChangeText }: any) => {
@@ -30,7 +31,7 @@ const TextField = ({ title, value, onChangeText }: any) => {
 }
 
 const ProfileSettings = (props: ProfileSettingsProps) => {
-    const { user, refreshUser, setRefreshUser } = React.useContext(AuthContext)
+    const { user, refreshUser, setRefreshUser, CreateNotification } = React.useContext(AuthContext)
     const [editedUserInfo, setEditedUserInfo] = React.useState(
         {
             fullName: user?.fullName,
@@ -81,6 +82,7 @@ const ProfileSettings = (props: ProfileSettingsProps) => {
                 address: editedUserInfo.address,
                 website: editedUserInfo.website
             });
+            CreateNotification(actions.PROFILE_UPDATED, user?.fullName, notificationString.HAS_BEEN_UPDATED, user?.userID)
             setRefreshUser(!refreshUser)
             setLoading(false)
         } catch (error) {

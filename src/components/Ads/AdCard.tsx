@@ -9,6 +9,7 @@ import { addDoc, collection, deleteDoc, doc, FieldValue, updateDoc } from 'fireb
 import { AuthContext } from '../../providers/auth';
 import { db } from '../../../App';
 import ToastBox from '../common/ToastBox';
+import { actions, notificationString } from '../../constants/notificationActions';
 interface AdCardProps {
     ad?: any,
 }
@@ -20,9 +21,11 @@ const AdCard = ({ ad }: AdCardProps) => {
     const { user, CreateNotification } = React.useContext(AuthContext)
     const navigation: any = useNavigation()
     const [comment, setComment] = React.useState('')
+
     const deleteAd = async (id: string) => {
         try {
             await deleteDoc(doc(db, "ads", id));
+            CreateNotification(actions.AD_DELETED, user?.fullName, notificationString.HAS_BEEN_DELETED, ad?.userID)
             toast.show({
                 render: () => { return <ToastBox type='success' message={"Ad Deleted"} /> },
                 placement: "top"
@@ -38,7 +41,7 @@ const AdCard = ({ ad }: AdCardProps) => {
             comments: [...ad?.comments, { userId: user?.userID, comment: comment, userName: user?.fullName, userImage: user?.photoUrl }]
         });
         if (user?.userID !== ad?.userID) {
-            CreateNotification('commented', user?.fullName, 'on your ad', ad?.userID)
+            CreateNotification(actions.COMMENTED, user?.fullName, notificationString.ON_YOUR_POST, ad?.userID)
         }
         setComment('')
     }
@@ -102,7 +105,7 @@ const AdCard = ({ ad }: AdCardProps) => {
                                     <Avatar size={'sm'} bg="green.500" mr={2} source={{
                                         uri: comment?.userImage
                                     }} />}
-                                <View mt={-0.5}>
+                                <View mt={-0.5} w={260}>
                                     <Text fontWeight={'bold'} opacity={0.7} >{user?.userID === comment?.userId ? "You" : comment?.userName} </Text>
                                     <Text>{comment?.comment}</Text>
                                 </View>

@@ -58,6 +58,7 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
                 createdAt: new Date(),
                 price: parseFloat(data?.price)
             })
+
             setNewAd(initialNewAd)
             setImages([])
         } catch (error) {

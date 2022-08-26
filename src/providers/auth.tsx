@@ -6,6 +6,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { auth, db } from '../../App';
 import ToastBox from '../components/common/ToastBox';
+import { actions, notificationString } from '../constants/notificationActions';
 
 export const AuthContext = React.createContext({} as any);
 
@@ -67,6 +68,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             })
             setLoading(false)
             navigation.navigate('Home')
+            CreateNotification(actions.COMMENTED, user?.fullName, notificationString.ACCOUNT_CREATED, createdUser.user.uid)
         } catch (error: any) {
             toast.show({
                 render: () => <ToastBox type='error' message={error?.message} />,
