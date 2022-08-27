@@ -15,12 +15,11 @@ interface AppBarProps {
 const AppBar = ({ showToolBar, darkTheme, minimal }: AppBarProps) => {
   const { user, allNotifications } = React.useContext(AuthContext)
   const navigation: any = useNavigation()
-  const [newNotificationsCount, setNewNotificationsCount] = React.useState(0)
+  const [count, setCount] = React.useState(0)
 
   React.useEffect(() => {
-    console.log(newNotificationsCount);
+    console.log(count)
   }, [])
-
   return (
     <View>
       <HStack bg={darkTheme ? colors.dark : colors.white} px="4" py="3" justifyContent="space-between" alignItems="center" w="100%">
