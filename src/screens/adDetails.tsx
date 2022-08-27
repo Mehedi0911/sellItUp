@@ -15,7 +15,7 @@ interface AdDetailsProps {
 }
 
 
-const listItem = ({ item }: any) => {
+const ListItem = ({ item }: any) => {
     return (
         <HStack space={2} mb={1} alignItems={'center'}>
             <Icon as={AntDesign} name="check" size="sm" color={colors.green} />
@@ -152,11 +152,16 @@ const AdDetails = ({ route }: any) => {
                 <Divider />
                 <View my={5}>
                     <Text fontSize={'lg'} opacity={0.6} mb={2}>Features</Text>
-                    <FlatList
+                    {/* <FlatList
                         data={ad?.features}
                         renderItem={listItem}
                         keyExtractor={(item: string, index: number) => item + index}
-                    />
+                    /> */}
+                    {
+                        ad?.features?.map((feature: any, index: number) => (
+                            <ListItem item={feature} key={index} />
+                        ))
+                    }
                 </View>
                 <Divider />
                 <View my={5}>

@@ -93,7 +93,7 @@ const AdCard = ({ ad }: AdCardProps) => {
                 </HStack>
             }
             <View p={3}>
-                <Text fontWeight={'bold'} opacity={0.6} mb={2}>{ad?.comments?.length} comments</Text>
+                <Text fontWeight={'bold'} opacity={0.6} mb={2}>{ad?.comments?.length > 0 ? ad?.comments?.length : 'No'} comments</Text>
                 <View>
                     {
                         ad?.comments?.map((comment: any, index: number) => (

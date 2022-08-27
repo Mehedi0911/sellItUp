@@ -17,9 +17,10 @@ const MayAds = (props: MayAdsProps) => {
     const [myAds, setMyAds] = React.useState([] as any)
 
     React.useEffect(() => {
-        const filtered = allAds?.filter((ad: any) => ad?.userID === user?.userId)
+        const filtered = allAds?.filter((ad: any) => ad?.userID === user?.userID)
         setMyAds(filtered)
-    }, [])
+        console.log(filtered?.length)
+    }, [user])
 
     return (
         <View >

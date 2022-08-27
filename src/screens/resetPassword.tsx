@@ -7,11 +7,15 @@ import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
 import Input from "../components/common/Input";
+import { AuthContext } from "../providers/auth";
 interface SignInProps {
   navigation: any;
 }
 
 const ResetPassword = ({ navigation }: SignInProps) => {
+  const { resetPassword } = React.useContext(AuthContext)
+  const [newPass, setNewPass] = React.useState('')
+  const [confirmNewPass, setConfirmNewPass] = React.useState('')
   return (
     <View style={styles.container}>
       <AppBar showToolBar={false} />
@@ -23,10 +27,10 @@ const ResetPassword = ({ navigation }: SignInProps) => {
           </Text>
         </HStack>
         <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit.</Text>
-        <Input placeHolder="new password" secureTextEntry />
-        <Input placeHolder="confirm new password" secureTextEntry />
+        <Input placeHolder="new password" secureTextEntry onChangeText={(text: string) => setNewPass(text)} />
+        <Input placeHolder="confirm new password" secureTextEntry onChangeText={(text: string) => setConfirmNewPass(text)} />
 
-        <Button my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
+        <Button onPress={() => resetPassword(newPass, navigation)} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
           Reset
         </Button>
       </ScrollView>

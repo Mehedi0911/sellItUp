@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from 'firebase/auth';
 import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { useToast } from 'native-base';
 import * as React from 'react';
@@ -24,11 +24,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             setLoading(true)
             const res = await signInWithEmailAndPassword(auth, email, password);
             setAuthenticated(true)
-            // const q = query(collection(db, "users"), where("userID", "==", res.user.uid));
-            // const querySnapshot = await getDocs(q);
-            // querySnapshot.forEach((doc) => {
-            //     setUser({ ...doc.data(), id: doc.id })
-            // });
             setLoading(false)
             toast.show({
                 render: () => <ToastBox type='success' message={"Signed In Successfully"} />,
@@ -85,6 +80,26 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             render: () => <ToastBox type='success' message={"Logged Out"} />,
             placement: "top"
         })
+    }
+
+    const resetPassword = async (newPass: string, navigation: any) => {
+        const u = auth.currentUser
+        try {
+            if (u !== null) {
+                let res = await updatePassword(u, newPass)
+                toast.show({
+                    render: () => <ToastBox type='success' message={"Password reset successful"} />,
+                    placement: "top"
+                })
+                navigation?.navigate('Home')
+            }
+        } catch (error) {
+            toast.show({
+                render: () => <ToastBox type='success' message={"Something Went Wrong while resting the password"} />,
+                placement: "top"
+            })
+        }
+
     }
 
     const CreateNotification = async (action: string, actionTaker: string, notificationString: string, forWhom: string,) => {
@@ -144,7 +159,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                 setUser,
                 signin,
                 signUpUserWithEmail,
-                signOutUser,
+                signOutUser, resetPassword,
                 isAuthenticated,
                 setAuthenticated,
                 refreshUser,

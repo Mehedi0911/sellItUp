@@ -4,13 +4,14 @@ import { FlatList, StyleSheet } from 'react-native';
 import ButtonGroup from '../components/common/ButtonGroup';
 import ScreenHeader from '../components/common/ScreenHeader';
 import { AdContext } from '../providers/ad';
-import { TextField } from './createAdScreenOne';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteObject, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { colors } from '../theme/colors';
 import { TouchableHighlight } from 'react-native-gesture-handler';
 import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../providers/auth';
+import TextField from '../components/common/TextField';
+import { ValidateAdScreenTwo } from '../utils/formValidators';
 interface CreateAdScreenTwoProps {
     navigation: any;
 }
@@ -20,7 +21,11 @@ const CreateAdScreenTwo = ({ navigation }: CreateAdScreenTwoProps) => {
     const { user } = React.useContext(AuthContext)
     const { newAd, setNewAd, images, setImages } = React.useContext(AdContext)
     const [newFeature, setNewFeature] = React.useState('')
+    const [errorField, setErrorField] = React.useState(null as any)
     const pickImage = async () => {
+        if (errorField?.name === 'images') {
+            setErrorField(null)
+        }
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: false,
@@ -54,7 +59,7 @@ const CreateAdScreenTwo = ({ navigation }: CreateAdScreenTwoProps) => {
         });
     }
 
-    const listItem = ({ item }: any) => {
+    const ListItem = ({ item }: any) => {
         return (
             <HStack space={2} mb={1} alignItems={'center'}>
                 <Text>{item}</Text>
@@ -71,7 +76,7 @@ const CreateAdScreenTwo = ({ navigation }: CreateAdScreenTwoProps) => {
             <ScreenHeader title='Create Ad (2/3)' />
             <ScrollView>
                 <View p={6}>
-                    <TextField title='Description *' placeHolder="description" numberOfLines={6} onChangeText={(text: string) => setNewAd({ ...newAd, description: text })} />
+                    <TextField error={errorField?.name === 'description' && errorField?.error} h={32} title='Description *' placeHolder="description" numberOfLines={6} onChangeText={(text: string) => setNewAd({ ...newAd, description: text })} />
                     <HStack space={2}>
                         <Input variant={'unstyled'} bgColor={colors.grey} flex={1} placeholder="Add Features" value={newFeature} onChangeText={(text: string) => setNewFeature(text)} />
                         <IconButton w={12} bgColor={colors.primary} borderRadius="sm" variant="solid" icon={<Icon as={Feather} name="plus" size="sm" color={colors.grey} />} onPress={() => {
@@ -79,15 +84,15 @@ const CreateAdScreenTwo = ({ navigation }: CreateAdScreenTwoProps) => {
                             setNewFeature("");
                         }} />
                     </HStack>
-                    {/* <TextField title='Features' placeHolder="features" numberOfLines={6} onChangeText={(text: string) => setNewAd({ ...newAd, description: text })} /> */}
                 </View>
+
                 <View px={6} >
                     {newAd?.features?.length > 0 && <Text fontWeight={'semibold'} mb={1} mt={-2} opacity={0.7}>Added Features</Text>}
-                    <FlatList
-                        data={newAd.features}
-                        renderItem={listItem}
-                        keyExtractor={(item, index) => item + index}
-                    />
+                    {
+                        newAd?.features?.map((feature: any, index: number) => (
+                            <ListItem item={feature} key={index} />
+                        ))
+                    }
                 </View>
                 <HStack flexWrap={'wrap'} alignItems={'center'} p={6} mx={6} space={5}
                     borderWidth={2} borderColor={colors.grey} mt={6}>
@@ -104,12 +109,21 @@ const CreateAdScreenTwo = ({ navigation }: CreateAdScreenTwoProps) => {
                             <Icon as={MaterialCommunityIcons} name="image-plus" size="lg" />
                         </TouchableHighlight>}
                 </HStack>
-                <Text mx={6} mt={1} color={Boolean(images.length <= 3) ? 'grey' : colors.red}>{Boolean(images.length <= 3) ? `${4 - images.length} images left` : 'Max Limit reached'}</Text>
+                <Text mx={6} mt={1} color={Boolean(images.length <= 3) ? 'grey' : colors.red}>{Boolean(images.length <= 3) ? `${4 - images.length} images left${errorField?.name === 'images' ? `(${errorField.error})` : ''}` : 'Max Limit reached'}</Text>
 
                 <View style={styles.bottom}>
                     <ButtonGroup leftText='Previous' rightText='Save & Next'
                         onPressLeft={() => navigation.goBack()}
-                        onPressRight={() => navigation.navigate('CreateAdScreenThree')}
+                        onPressRight={() => {
+                            let err = ValidateAdScreenTwo(newAd, images)
+                            if (err) {
+                                setErrorField(err)
+                                return
+                            } else {
+                                setErrorField(null)
+                                navigation.navigate('CreateAdScreenThree')
+                            }
+                        }}
                     />
                 </View>
             </ScrollView>

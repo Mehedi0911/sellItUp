@@ -33,7 +33,7 @@ const EditAd = ({ route }: any) => {
 
     console.log({ ad })
 
-    const listItem = ({ item }: any) => {
+    const ListItem = ({ item }: any) => {
         return (
             <HStack space={2} mb={1} alignItems={'center'}>
                 <Text>{item}</Text>
@@ -85,11 +85,11 @@ const EditAd = ({ route }: any) => {
                 </View>
                 <View >
                     {editedAd?.features?.length > 0 && <Text fontWeight={'semibold'} mb={1} mt={-2} opacity={0.7}>Added Features</Text>}
-                    <FlatList
-                        data={editedAd?.features}
-                        renderItem={listItem}
-                        keyExtractor={(item: any, index) => item + index}
-                    />
+                    {
+                        editedAd?.features?.map((feature: any, index: number) => (
+                            <ListItem item={feature} key={index} />
+                        ))
+                    }
                 </View>
                 <TextField value={editedAd.price} title='Price *' placeHolder="price" onChangeText={(text: string) => setEditedAd({ ...editedAd, price: text })} />
                 <TextField value={editedAd.tags} title='Tags' placeHolder="eg : new, best" onChangeText={(text: string) => setEditedAd({ ...editedAd, tags: text })} />

@@ -20,7 +20,7 @@ const initialNewAd = {
     authenticity: '',
     tags: '',
     price: 0,
-    isNegotiable: false,
+    isNegotiable: '',
     description: '',
     features: [],
     phone: '',
@@ -58,7 +58,6 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
                 createdAt: new Date(),
                 price: parseFloat(data?.price)
             })
-
             setNewAd(initialNewAd)
             setImages([])
         } catch (error) {
