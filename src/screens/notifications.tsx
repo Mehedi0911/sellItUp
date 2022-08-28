@@ -19,7 +19,7 @@ const Notifications = (props: NotificationsProps) => {
                 <View>
                     {
                         allNotifications?.map((notification: any) => (
-                            <HStack p={2} bgColor={notification?.status === 'new' ? colors.grey : colors.white} alignItems={'center'} borderBottomWidth={1} borderBottomColor={'#E0E0E0'}>
+                            <HStack key={notification?.id} p={2} bgColor={notification?.status === 'new' ? colors.grey : colors.white} alignItems={'center'} borderBottomWidth={1} borderBottomColor={'#E0E0E0'}>
                                 <Center bgColor={colors.primary} h={7} w={7} borderRadius={14} mr={1.5}>
                                     <Text fontSize={'md'} fontWeight={'semibold'} color={colors.white}>{notification?.actionTaker?.charAt(0)?.toUpperCase()}</Text>
                                 </Center>
