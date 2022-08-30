@@ -71,7 +71,6 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
                 adList.push({ ...snapshot.data(), id: snapshot.id })
             })
             setAllAds(adList)
-            console.log(sortLabel);
         })
         return adsListenerSubscription;
     }, [sortLabel])
@@ -86,7 +85,10 @@ const AdProviders: React.FunctionComponent = ({ children }) => {
                 saveAd,
                 images,
                 setImages,
-                adQuery, setAdQuery, sortLabel, setSortLabel
+                adQuery,
+                setAdQuery,
+                sortLabel,
+                setSortLabel,
             }}>
             {children}
         </AdContext.Provider>

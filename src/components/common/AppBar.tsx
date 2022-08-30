@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../theme/colors";
 import { AuthContext } from "../../providers/auth";
 import { useNavigation } from "@react-navigation/native";
+import { AdContext } from "../../providers/ad";
 interface AppBarProps {
   showToolBar: boolean;
   darkTheme?: boolean
@@ -13,14 +14,9 @@ interface AppBarProps {
 }
 
 const AppBar = ({ showToolBar, darkTheme, minimal }: AppBarProps) => {
-  const { user, allNotifications } = React.useContext(AuthContext)
+  const { user, notificationCount } = React.useContext(AuthContext)
   const navigation: any = useNavigation()
-  const [notificationCount, setNotificationCount] = React.useState(0)
 
-  React.useEffect(() => {
-    const newNotifications = allNotifications?.filter((notification: any) => notification?.status === 'read')
-    setNotificationCount(newNotifications?.length)
-  }, [])
 
   return (
     <View>
@@ -42,12 +38,12 @@ const AppBar = ({ showToolBar, darkTheme, minimal }: AppBarProps) => {
             }
             {(!minimal && user) &&
               <View>
-                <Badge
+                {notificationCount > 0 && <Badge
                   bgColor={colors.secondary} rounded="full" mb={-6} mr={-1} zIndex={1} variant="solid" alignSelf="flex-end" _text={{
                     fontSize: 12
                   }}>
-                  {allNotifications?.length}
-                </Badge>
+                  {notificationCount}
+                </Badge>}
                 <IconButton onPress={() => navigation.navigate('Notifications')} icon={<Icon as={MaterialIcons} name="notifications" size="lg" color={darkTheme ? colors.white : colors.black} />} />
               </View>
             }

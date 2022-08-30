@@ -12,41 +12,16 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import AuthProvider from "./src/providers/auth";
 import AdProviders from "./src/providers/ad";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth/react-native';
 const app = initializeApp({ ...firebaseConfig });
 export const db = getFirestore(app);
-export const auth = getAuth(app);
+// export const auth = getAuth(app);
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
 
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-  useEffect(() => {
-    const loadFonts = async () => {
-      try {
-        await Font.loadAsync({
-          "Montserrat-Regular": require("./assets/fonts/Montserrat-Regular.ttf"),
-          "Montserrat-Medium": require("./assets/fonts/Montserrat-Medium.ttf"),
-          "Montserrat-Bold": require("./assets/fonts/Montserrat-Bold.ttf"),
-        });
-      } catch (error) {
-      } finally {
-        setFontsLoaded(true);
-      }
-    };
-    loadFonts();
-  }, []);
-
-  // useEffect(() => {
-  //   signOut(auth)
-  // }, [])
-
-
-  if (!fontsLoaded) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator color={colors.primary} />
-      </View>
-    );
-  }
 
   const appTheme = extendTheme({
     colors: {

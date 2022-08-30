@@ -2,7 +2,6 @@ import { Button, Checkbox, HStack, Icon, Pressable, Text, TextArea } from "nativ
 import * as React from "react";
 import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import AppBar from "../components/common/AppBar";
-import { typography } from "../theme/typography";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -19,7 +18,7 @@ const ForgotPassword = ({ navigation }: SignInProps) => {
       <ScrollView style={styles.contentWrapper}>
         <HStack alignItems="center" mt={10} mb={3}>
           <MaterialIcons name="admin-panel-settings" size={22} color={colors.primary} />
-          <Text fontSize={"xl"} fontWeight="semibold" fontFamily={typography.primary} ml={2}>
+          <Text fontSize={"xl"} fontWeight="semibold" ml={2}>
             Forgot Password
           </Text>
         </HStack>

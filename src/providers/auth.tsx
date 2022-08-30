@@ -16,6 +16,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
     const [refreshUser, setRefreshUser] = React.useState(false)
     const [isAuthenticated, setAuthenticated] = React.useState(false)
     const [allNotifications, setAllNotifications] = React.useState([] as any)
+    const [notificationCount, setNotificationCount] = React.useState(0)
     const [loading, setLoading] = React.useState(false)
 
     const signin = async (credentials: any) => {
@@ -111,6 +112,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                 notificationString: notificationString,
                 redirectTo: 'someLink',
                 forWhom: forWhom,
+                time: new Date()
             })
         } catch (error) {
             console.log(error);
@@ -147,6 +149,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                     notificationsList.push({ ...snapshot.data(), id: snapshot.id })
                 })
                 setAllNotifications(notificationsList)
+                const newNotifications = notificationsList?.filter((notification: any) => notification?.status !== 'read')
+                setNotificationCount(newNotifications?.length)
             })
             return notificationsListenerSubscription;
         }
@@ -164,7 +168,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                 setAuthenticated,
                 refreshUser,
                 setRefreshUser,
-                CreateNotification, allNotifications
+                CreateNotification, allNotifications,
+                notificationCount, setNotificationCount
             }}>
             {children}
         </AuthContext.Provider>

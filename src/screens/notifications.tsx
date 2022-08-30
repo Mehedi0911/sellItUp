@@ -1,7 +1,9 @@
+import { doc, updateDoc } from 'firebase/firestore';
 import { Center, HStack, Text, View } from 'native-base';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { db } from '../../App';
 import ScreenHeader from '../components/common/ScreenHeader';
 import { actions } from '../constants/notificationActions';
 import { AuthContext } from '../providers/auth';
@@ -10,8 +12,23 @@ import { colors } from '../theme/colors';
 interface NotificationsProps { }
 
 const Notifications = (props: NotificationsProps) => {
-    const { allNotifications } = React.useContext(AuthContext)
-    console.log({ allNotifications })
+    const { allNotifications, notificationCount, setNotificationCount } = React.useContext(AuthContext)
+    React.useEffect(() => {
+        if (notificationCount > 0) {
+            for (let i = 0; i < allNotifications.length; i++) {
+                const notification = allNotifications[i];
+                const MarkAsRead = async () => {
+                    const docRef = doc(db, "notifications", notification?.id);
+                    await updateDoc(docRef, {
+                        status: 'read',
+                    });
+                }
+                MarkAsRead();
+            }
+            setNotificationCount(0)
+            console.log('calling');
+        }
+    }, [])
     return (
         <View style={styles.container}>
             <ScreenHeader title="Notifications" />
@@ -38,6 +55,7 @@ const Notifications = (props: NotificationsProps) => {
                         ))
                     }
                 </View>
+
             </ScrollView>
         </View>
     );

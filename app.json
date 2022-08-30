@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "sellItUp",
+    "name": "Sell Up",
     "slug": "sellItUp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,6 +21,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "moshdev.sellup",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

@@ -2,7 +2,6 @@ import { Button, Checkbox, HStack, Icon, Pressable, Text, TextArea } from "nativ
 import * as React from "react";
 import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import AppBar from "../components/common/AppBar";
-import { typography } from "../theme/typography";
 import { AntDesign } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
@@ -18,7 +17,7 @@ const VerifyAccount = ({ navigation }: SignInProps) => {
       <ScrollView style={styles.contentWrapper}>
         <HStack alignItems="center" mt={10} mb={3}>
           <Octicons name="verified" size={22} color={colors.primary} />
-          <Text fontSize={"xl"} fontWeight="semibold" fontFamily={typography.primary} ml={2}>
+          <Text fontSize={"xl"} fontWeight="semibold" ml={2}>
             Email Verification
           </Text>
         </HStack>

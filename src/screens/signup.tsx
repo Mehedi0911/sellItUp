@@ -2,7 +2,6 @@ import * as React from "react";
 import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import { Button, Checkbox, HStack, Icon, Image, Pressable, Spinner, Text, TextArea } from "native-base";
 import AppBar from "../components/common/AppBar";
-import { typography } from "../theme/typography";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
@@ -49,7 +48,7 @@ const SignUp = ({ navigation }: SignUpProps) => {
       <ScrollView style={styles.contentWrapper}>
         <HStack alignItems="center" mt={5} mb={3}>
           <FontAwesome name="user-circle-o" size={22} color={colors.primary} />
-          <Text fontSize={"xl"} fontWeight="semibold" fontFamily={typography.primary} ml={2}>
+          <Text fontSize={"xl"} fontWeight="semibold" ml={2}>
             Sign Up
           </Text>
         </HStack>

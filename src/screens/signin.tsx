@@ -2,7 +2,6 @@ import { Button, Checkbox, HStack, Icon, Pressable, Spinner, Text, TextArea } fr
 import * as React from "react";
 import { View, StyleSheet, TextInput, ScrollView } from "react-native";
 import AppBar from "../components/common/AppBar";
-import { typography } from "../theme/typography";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
@@ -25,7 +24,7 @@ const SignIn = ({ navigation }: SignInProps) => {
       <ScrollView style={styles.contentWrapper}>
         <HStack alignItems="center" mt={10} mb={3}>
           <FontAwesome name="user-circle-o" size={22} color={colors.primary} />
-          <Text fontSize={"xl"} fontWeight="semibold" fontFamily={typography.primary} ml={2}>
+          <Text fontSize={"xl"} fontWeight="semibold" ml={2}>
             Sign in to your account
           </Text>
         </HStack>
