@@ -1,6 +1,6 @@
-import { Button, Checkbox, HStack, Icon, Pressable, Text, TextArea } from "native-base";
+import { Button, Checkbox, HStack, Icon, Pressable, Text, TextArea, useToast } from "native-base";
 import * as React from "react";
-import { View, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, ScrollView, Keyboard } from "react-native";
 import AppBar from "../components/common/AppBar";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -12,6 +12,7 @@ interface SignInProps {
 }
 
 const ResetPassword = ({ navigation }: SignInProps) => {
+  const toast = useToast()
   const { resetPassword } = React.useContext(AuthContext)
   const [newPass, setNewPass] = React.useState('')
   const [confirmNewPass, setConfirmNewPass] = React.useState('')
@@ -29,7 +30,26 @@ const ResetPassword = ({ navigation }: SignInProps) => {
         <Input placeHolder="new password" secureTextEntry onChangeText={(text: string) => setNewPass(text)} />
         <Input placeHolder="confirm new password" secureTextEntry onChangeText={(text: string) => setConfirmNewPass(text)} />
 
-        <Button onPress={() => resetPassword(newPass, navigation)} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
+        <Button onPress={async () => {
+          if (!newPass || !confirmNewPass) {
+            toast.show({
+              description: "Please fill the credentials",
+              bgColor: colors.red,
+            })
+          }
+          if (newPass !== confirmNewPass) {
+            toast.show({
+              description: "Password doesn't not match",
+              bgColor: colors.red,
+            })
+          }
+          Keyboard.dismiss()
+          const res = await resetPassword(newPass, navigation)
+          toast.show({
+            description: res[1],
+            bgColor: res[0] ? colors.green : colors.red,
+          })
+        }} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
           Reset
         </Button>
       </ScrollView>

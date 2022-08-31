@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, TextInput, ScrollView } from "react-native";
+import { View, StyleSheet, TextInput, ScrollView, Keyboard } from "react-native";
 import { Button, Checkbox, HStack, Icon, Image, Pressable, Spinner, Text, TextArea } from "native-base";
 import AppBar from "../components/common/AppBar";
 import { FontAwesome } from "@expo/vector-icons";
@@ -10,7 +10,6 @@ import Input from "../components/common/Input";
 import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, addDoc, collection } from "firebase/firestore";
 import { auth, db } from "../../App";
-import ToastBox from "../components/common/ToastBox";
 import { AuthContext } from "../providers/auth";
 interface SignUpProps {
   navigation: any;
@@ -67,7 +66,28 @@ const SignUp = ({ navigation }: SignUpProps) => {
         />
 
         {loading ? <Spinner size="lg" color={colors.secondary} /> :
-          <Button onPress={() => signUpUserWithEmail(newUser, navigation)} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
+          <Button onPress={async () => {
+            if (!newUser?.fullName || !newUser?.email || !newUser?.password || !confirmedPassword) {
+              toast.show({
+                description: "Please fill Up the credentials",
+                bgColor: colors.red,
+              })
+              return
+            }
+            if (newUser?.password !== confirmedPassword) {
+              toast.show({
+                description: "Password Doesn't match",
+                bgColor: colors.red,
+              })
+              return
+            }
+            Keyboard.dismiss()
+            const res = await signUpUserWithEmail(newUser, navigation)
+            toast.show({
+              description: res[1],
+              bgColor: res[0] ? colors.green : colors.red,
+            })
+          }} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
             Sign Up
           </Button>}
         <HStack space={2} justifyContent="center">
@@ -88,7 +108,7 @@ const SignUp = ({ navigation }: SignUpProps) => {
         </HStack>
         <HStack alignItems="center" mt={3}>
           <Text mr={3}>Skip sining up</Text>
-          <Pressable onPress={() => navigation.navigate("VerifyAccount")}>
+          <Pressable onPress={() => navigation.navigate("Home")}>
             <Text color="brandPrimary.main" fontWeight={"bold"}>
               Go to home
             </Text>

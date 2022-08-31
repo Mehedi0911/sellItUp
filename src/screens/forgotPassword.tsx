@@ -28,9 +28,6 @@ const ForgotPassword = ({ navigation }: SignInProps) => {
         <Button onPress={() => navigation.navigate("ResetPassword")} my={3} bgColor={"brandPrimary.main"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
           Get Reset Link
         </Button>
-        <Button my={3} bgColor={"brandPrimary.100"} endIcon={<Icon as={AntDesign} name="arrowright" size="sm" color="white" />}>
-          Back to sign in
-        </Button>
         <HStack alignItems="center">
           <Text mr={3}>Don't have account?</Text>
           <Pressable onPress={() => navigation.navigate("SignUp")}>

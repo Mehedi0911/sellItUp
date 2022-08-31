@@ -5,7 +5,6 @@ import { useToast } from 'native-base';
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { auth, db } from '../../App';
-import ToastBox from '../components/common/ToastBox';
 import { actions, notificationString } from '../constants/notificationActions';
 
 export const AuthContext = React.createContext({} as any);
@@ -26,17 +25,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
             const res = await signInWithEmailAndPassword(auth, email, password);
             setAuthenticated(true)
             setLoading(false)
-            toast.show({
-                render: () => <ToastBox type='success' message={"Signed In Successfully"} />,
-                placement: "top"
-            })
+            return [true, 'Logged in successfully']
 
         } catch (error) {
-            toast.show({
-                render: () => <ToastBox type='error' message={"Something went wrong!"} />,
-                placement: "top"
-            })
             setLoading(false)
+            return [false, 'Logged in failed']
         }
     }
 
@@ -53,34 +46,22 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
                 type: 'member'
             })
             if (!profile) {
-                toast.show({
-                    render: () => <ToastBox type='error' message={"Something Went Wrong creating Account"} />,
-                    placement: "top"
-                })
+                return [false, 'Something went wrong']
             }
-            toast.show({
-                render: () => <ToastBox type='success' message={"Signed Up Successfully"} />,
-                placement: "top"
-            })
             setLoading(false)
             navigation.navigate('Home')
             CreateNotification(actions.COMMENTED, user?.fullName, notificationString.ACCOUNT_CREATED, createdUser.user.uid)
+            return [true, 'Account Created Successfully']
         } catch (error: any) {
-            toast.show({
-                render: () => <ToastBox type='error' message={error?.message} />,
-                placement: "top"
-            })
             setLoading(false)
+            return [false, 'Something went wrong']
         }
     }
 
     const signOutUser = (navigation: any) => {
         signOut(auth)
         navigation.navigate('Home')
-        toast.show({
-            render: () => <ToastBox type='success' message={"Logged Out"} />,
-            placement: "top"
-        })
+        return [true, 'Logged Out']
     }
 
     const resetPassword = async (newPass: string, navigation: any) => {
@@ -88,17 +69,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
         try {
             if (u !== null) {
                 let res = await updatePassword(u, newPass)
-                toast.show({
-                    render: () => <ToastBox type='success' message={"Password reset successful"} />,
-                    placement: "top"
-                })
                 navigation?.navigate('Home')
+                return [true, 'Password Reset Success']
             }
         } catch (error) {
-            toast.show({
-                render: () => <ToastBox type='success' message={"Something Went Wrong while resting the password"} />,
-                placement: "top"
-            })
+            return [false, 'Something went wrong']
         }
 
     }

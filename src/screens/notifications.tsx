@@ -3,6 +3,7 @@ import { Center, HStack, Text, View } from 'native-base';
 import * as React from 'react';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import TimeAgo from 'react-native-timeago';
 import { db } from '../../App';
 import ScreenHeader from '../components/common/ScreenHeader';
 import { actions } from '../constants/notificationActions';
@@ -26,7 +27,6 @@ const Notifications = (props: NotificationsProps) => {
                 MarkAsRead();
             }
             setNotificationCount(0)
-            console.log('calling');
         }
     }, [])
     return (

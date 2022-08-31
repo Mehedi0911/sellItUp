@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection, deleteDoc, doc, FieldValue, updateDoc } from 'firebase/firestore';
 import { AuthContext } from '../../providers/auth';
 import { db } from '../../../App';
-import ToastBox from '../common/ToastBox';
 import { actions, notificationString } from '../../constants/notificationActions';
 interface AdCardProps {
     ad?: any,
@@ -27,8 +26,8 @@ const AdCard = ({ ad }: AdCardProps) => {
             await deleteDoc(doc(db, "ads", id));
             CreateNotification(actions.AD_DELETED, user?.fullName, notificationString.HAS_BEEN_DELETED, ad?.userID)
             toast.show({
-                render: () => { return <ToastBox type='success' message={"Ad Deleted"} /> },
-                placement: "top"
+                description: "Ad Deleted successfully",
+                bgColor: colors.red,
             })
         } catch (error) {
             console.log(error);

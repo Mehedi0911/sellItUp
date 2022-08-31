@@ -8,7 +8,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { db } from '../../App';
 import ScreenHeader from '../components/common/ScreenHeader';
 import TextField from '../components/common/TextField';
-import ToastBox from '../components/common/ToastBox';
 import { actions, notificationString } from '../constants/notificationActions';
 import { AuthContext } from '../providers/auth';
 import { colors } from '../theme/colors';
@@ -58,13 +57,16 @@ const EditAd = ({ route }: any) => {
             });
             CreateNotification(actions.AD_EDITED, user?.fullName, notificationString?.HAS_BEEN_UPDATED, user?.userID)
             toast.show({
-                render: () => { return <ToastBox type='success' message={"Updated Successfully"} /> },
-                placement: "top"
+                description: "Ad Updated successfully",
+                bgColor: colors.green,
             })
             setLoading(false)
 
         } catch (error) {
-            console.log(error)
+            toast.show({
+                description: "Something went wrong",
+                bgColor: colors.red,
+            })
             setLoading(false)
         }
     }

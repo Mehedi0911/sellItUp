@@ -9,9 +9,9 @@ import { AdContext } from '../../providers/ad';
 import { AuthContext } from '../../providers/auth';
 import { colors } from '../../theme/colors';
 
-interface MayAdsProps { }
+interface MyAdsProps { }
 
-const MayAds = (props: MayAdsProps) => {
+const MyAds = (props: MyAdsProps) => {
     const { allAds } = React.useContext(AdContext)
     const { user } = React.useContext(AuthContext)
     const [myAds, setMyAds] = React.useState([] as any)
@@ -46,7 +46,7 @@ const MayAds = (props: MayAdsProps) => {
     );
 };
 
-export default MayAds;
+export default MyAds;
 
 const styles = StyleSheet.create({
     container: {}

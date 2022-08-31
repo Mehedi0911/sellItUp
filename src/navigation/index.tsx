@@ -26,7 +26,7 @@ import CustomDrawer from "../components/common/CustomDrawer";
 import { Divider, Icon } from "native-base";
 import Overview from "../screens/profile/overview";
 import ProfileSettings from "../screens/profile/profileSettings";
-import MayAds from "../screens/profile/myads";
+import MyAds from "../screens/profile/myads";
 import FavoriteAds from "../screens/profile/favouriteAds";
 import PlanAndBillings from "../screens/profile/plans&Billings";
 import { AuthContext } from "../providers/auth";
@@ -192,16 +192,16 @@ const Navigation = (props: NavigationProps) => {
           <Drawer.Screen name="Home" component={HomeStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={Ionicons} name="home" color={color} size='lg' />)
           }} />
-          <Drawer.Screen name="Overview" component={Overview} options={{
+          <Drawer.Screen name="Overview" component={user ? Overview : AuthStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={MaterialIcons} name="dashboard" color={color} size='lg' />)
           }} />
-          <Drawer.Screen name="My Ads" component={MayAds} options={{
+          <Drawer.Screen name="My Ads" component={user ? MyAds : AuthStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={MaterialCommunityIcons} name="post-outline" color={color} size='lg' />)
           }} />
-          <Drawer.Screen name="Favorite Ads" component={FavoriteAds} options={{
+          <Drawer.Screen name="Favorite Ads" component={user ? FavoriteAds : AuthStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={MaterialIcons} name="favorite" color={color} size='lg' />)
           }} />
-          <Drawer.Screen name="Plans & Billings" component={PlanAndBillings} options={{
+          <Drawer.Screen name="Plans & Billings" component={user ? PlanAndBillings : AuthStackGroup} options={{
             drawerIcon: ({ color }) => (<Icon as={Ionicons} name="trophy" color={color} size='lg' />)
           }} />
           <Drawer.Screen name="Profile" component={user ? ProfileSettings : AuthStackGroup} options={{
